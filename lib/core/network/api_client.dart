@@ -71,7 +71,6 @@ class ApiClient {
   }
 
   AppException _mapError(DioException e) {
-    // Already mapped by interceptor
     if (e.error is AppException) return e.error as AppException;
 
     final statusCode = e.response?.statusCode;

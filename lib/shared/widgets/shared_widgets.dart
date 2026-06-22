@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../core/constants/app_colors.dart';
-
-// ── AppButton ─────────────────────────────────────────────────────────────────
+import '../../core/constants/app_colors.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({
@@ -46,8 +44,6 @@ class AppButton extends StatelessWidget {
 
 enum AppButtonVariant { primary, outlined, text }
 
-// ── AppTextField ──────────────────────────────────────────────────────────────
-
 class AppTextField extends StatelessWidget {
   const AppTextField({
     super.key,
@@ -87,8 +83,6 @@ class AppTextField extends StatelessWidget {
   }
 }
 
-// ── LoadingIndicator ──────────────────────────────────────────────────────────
-
 class LoadingIndicator extends StatelessWidget {
   const LoadingIndicator({super.key, this.message});
   final String? message;
@@ -109,8 +103,6 @@ class LoadingIndicator extends StatelessWidget {
     );
   }
 }
-
-// ── ErrorView ─────────────────────────────────────────────────────────────────
 
 class ErrorView extends StatelessWidget {
   const ErrorView({
@@ -147,8 +139,6 @@ class ErrorView extends StatelessWidget {
     );
   }
 }
-
-// ── EmptyStateView ────────────────────────────────────────────────────────────
 
 class EmptyStateView extends StatelessWidget {
   const EmptyStateView({
