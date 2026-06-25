@@ -7,8 +7,8 @@ import '../../features/auth/presentation/register_screen.dart';
 import '../../features/auth/providers/auth_providers.dart';
 import '../../features/auth/providers/auth_state.dart';
 import '../../features/home/presentation/home_screen.dart';
+import '../../features/venues/presentation/venues_screen.dart';
 
-// Placeholder — replaced as each feature is built
 class _PlaceholderScreen extends StatelessWidget {
   const _PlaceholderScreen(this.title);
   final String title;
@@ -30,7 +30,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final isAuthRoute = state.matchedLocation == AppRoutes.login ||
           state.matchedLocation == AppRoutes.register;
 
-      // Still restoring session — don't redirect yet
       if (authState is AuthInitial) return null;
 
       if (!isAuthenticated && !isAuthRoute) return AppRoutes.login;
@@ -56,7 +55,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.venues,
         name: 'venues',
-        builder: (context, state) => const _PlaceholderScreen('Venues'),
+        builder: (context, state) => const VenuesScreen(),
       ),
       GoRoute(
         path: AppRoutes.bookings,
@@ -72,9 +71,6 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   );
 });
 
-/// Bridges Riverpod state changes into something GoRouter's
-/// refreshListenable can listen to, so redirect logic re-evaluates
-/// whenever auth state changes.
 class _AuthStateListenable extends ChangeNotifier {
   _AuthStateListenable(Ref ref) {
     ref.listen<AuthState>(authNotifierProvider, (_, __) => notifyListeners());
