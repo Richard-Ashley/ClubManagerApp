@@ -4,8 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_theme.dart';
-import '../../../shared/extensions/extensions.dart';
 import '../../../shared/widgets/design_system.dart';
+import '../../../shared/widgets/motion.dart';
 import '../../../shared/widgets/shared_widgets.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../../auth/providers/auth_state.dart';
@@ -99,8 +99,6 @@ class _VenuesList extends StatelessWidget {
       );
     }
 
-    final active = venues.where((v) => v.isActive).length;
-
     return SliverPadding(
       padding: const EdgeInsets.fromLTRB(22, 0, 22, 32),
       sliver: SliverList(
@@ -109,8 +107,12 @@ class _VenuesList extends StatelessWidget {
             if (index == 0) {
               return SectionLabel('All venues — ${venues.length}');
             }
-            final venue = venues[index - 1];
-            return _VenueRow(venue: venue);
+            final i = index - 1;
+            final venue = venues[i];
+            return StaggeredEntrance(
+              index: i,
+              child: _VenueRow(venue: venue),
+            );
           },
           childCount: venues.length + 1,
         ),
@@ -125,21 +127,94 @@ class _VenueRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListItemCard(
-      title: venue.name,
-      subtitle: venue.description.isEmpty ? '—' : venue.description,
-      isActive: venue.isActive,
-      trailing: StatusPill(
-        venue.isActive ? 'View slots' : 'Closed',
-        muted: !venue.isActive,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: PressableScale(
+        onTap: () {
+          Navigator.of(context).push(
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => VenueDetailScreen(
+                venueId: venue.id,
+                venueName: venue.name,
+              ),
+              transitionDuration: const Duration(milliseconds: 320),
+              reverseTransitionDuration: const Duration(milliseconds: 240),
+              transitionsBuilder: (_, animation, __, child) {
+                final curved = CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.easeOutCubic,
+                );
+                return FadeTransition(
+                  opacity: curved,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0.05, 0),
+                      end: Offset.zero,
+                    ).animate(curved),
+                    child: child,
+                  ),
+                );
+              },
+            ),
+          );
+        },
+        child: Stack(
+          children: [
+            if (venue.isActive)
+              Positioned(
+                left: 0,
+                top: 16,
+                bottom: 16,
+                child: Container(
+                  width: 2,
+                  decoration: BoxDecoration(
+                    color: AppColors.accent,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+            Container(
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                border: Border.all(color: AppColors.border, width: 0.5),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              padding: const EdgeInsets.fromLTRB(18, 16, 16, 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Hero(
+                          tag: 'venue-name-${venue.id}',
+                          flightShuttleBuilder: (_, __, ___, ____, _____) =>
+                              Material(
+                            color: Colors.transparent,
+                            child: Text(venue.name, style: AppTypography.title),
+                          ),
+                          child: Text(venue.name, style: AppTypography.title),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          venue.description.isEmpty ? '—' : venue.description,
+                          style: AppTypography.bodyMuted,
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  StatusPill(
+                    venue.isActive ? 'View slots' : 'Closed',
+                    muted: !venue.isActive,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => VenueDetailScreen(venueId: venue.id, venueName: venue.name),
-          ),
-        );
-      },
     );
   }
 }

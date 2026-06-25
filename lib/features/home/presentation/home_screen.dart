@@ -5,6 +5,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_theme.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../shared/widgets/design_system.dart';
+import '../../../shared/widgets/motion.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../../auth/providers/auth_state.dart';
 
@@ -34,18 +35,24 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 36),
-              _HomeCard(
-                eyebrow: 'Explore',
-                title: 'Browse venues',
-                description: 'See what is open and book a slot.',
-                onTap: () => context.push(AppRoutes.venues),
+              StaggeredEntrance(
+                index: 0,
+                child: _HomeCard(
+                  eyebrow: 'Explore',
+                  title: 'Browse venues',
+                  description: 'See what is open and book a slot.',
+                  onTap: () => context.push(AppRoutes.venues),
+                ),
               ),
               const SizedBox(height: 12),
-              _HomeCard(
-                eyebrow: 'Your day',
-                title: 'My bookings',
-                description: 'Manage upcoming and past reservations.',
-                onTap: () => context.push(AppRoutes.bookings),
+              StaggeredEntrance(
+                index: 1,
+                child: _HomeCard(
+                  eyebrow: 'Your day',
+                  title: 'My bookings',
+                  description: 'Manage upcoming and past reservations.',
+                  onTap: () => context.push(AppRoutes.bookings),
+                ),
               ),
             ],
           ),
@@ -70,36 +77,32 @@ class _HomeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: AppColors.surface,
-      borderRadius: BorderRadius.circular(14),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.border, width: 0.5),
-            borderRadius: BorderRadius.circular(14),
-          ),
-          padding: const EdgeInsets.fromLTRB(20, 20, 18, 20),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Eyebrow(eyebrow),
-                    const SizedBox(height: 8),
-                    Text(title, style: AppTypography.title.copyWith(fontSize: 18)),
-                    const SizedBox(height: 4),
-                    Text(description, style: AppTypography.bodyMuted),
-                  ],
-                ),
+    return PressableScale(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          border: Border.all(color: AppColors.border, width: 0.5),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        padding: const EdgeInsets.fromLTRB(20, 20, 18, 20),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Eyebrow(eyebrow),
+                  const SizedBox(height: 8),
+                  Text(title, style: AppTypography.title.copyWith(fontSize: 18)),
+                  const SizedBox(height: 4),
+                  Text(description, style: AppTypography.bodyMuted),
+                ],
               ),
-              const SizedBox(width: 12),
-              const Icon(Icons.arrow_forward, size: 18, color: AppColors.textPrimary),
-            ],
-          ),
+            ),
+            const SizedBox(width: 12),
+            const Icon(Icons.arrow_forward, size: 18, color: AppColors.textPrimary),
+          ],
         ),
       ),
     );

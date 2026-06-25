@@ -11,6 +11,7 @@ import '../../features/bookings/presentation/new_booking_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/venues/presentation/venues_screen.dart';
+import '../../shared/widgets/motion.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authNotifierProvider);
@@ -38,7 +39,8 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.register,
         name: 'register',
-        builder: (context, state) => const RegisterScreen(),
+        pageBuilder: (context, state) =>
+            appPageTransition(child: const RegisterScreen(), state: state),
       ),
       GoRoute(
         path: AppRoutes.home,
@@ -48,22 +50,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.venues,
         name: 'venues',
-        builder: (context, state) => const VenuesScreen(),
+        pageBuilder: (context, state) =>
+            appPageTransition(child: const VenuesScreen(), state: state),
       ),
       GoRoute(
         path: AppRoutes.bookings,
         name: 'bookings',
-        builder: (context, state) => const BookingsScreen(),
+        pageBuilder: (context, state) =>
+            appPageTransition(child: const BookingsScreen(), state: state),
       ),
       GoRoute(
         path: AppRoutes.newBooking,
         name: 'newBooking',
-        builder: (context, state) => const NewBookingScreen(),
+        pageBuilder: (context, state) =>
+            appPageTransition(child: const NewBookingScreen(), state: state),
       ),
       GoRoute(
         path: AppRoutes.profile,
         name: 'profile',
-        builder: (context, state) => const ProfileScreen(),
+        pageBuilder: (context, state) =>
+            appPageTransition(child: const ProfileScreen(), state: state),
       ),
     ],
   );

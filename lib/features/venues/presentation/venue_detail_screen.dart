@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_theme.dart';
 import '../../../shared/widgets/design_system.dart';
+import '../../../shared/widgets/motion.dart';
 import '../../../shared/widgets/shared_widgets.dart';
 import '../domain/venue_models.dart';
 import '../providers/venue_providers.dart';
@@ -40,15 +41,30 @@ class VenueDetailScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Eyebrow('Venue'),
+                    const Eyebrow('Venue'),
                     const SizedBox(height: 6),
-                    DisplayHeadline(venueName),
+                    Hero(
+                      tag: 'venue-name-$venueId',
+                      flightShuttleBuilder: (_, __, ___, ____, _____) =>
+                          Material(
+                        color: Colors.transparent,
+                        child: Text(venueName, style: AppTypography.display),
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: DisplayHeadline(venueName),
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
             slotsAsync.when(
-              data: (slots) => _SlotsSection(slots: slots, venueId: venueId, venueName: venueName),
+              data: (slots) => _SlotsSection(
+                slots: slots,
+                venueId: venueId,
+                venueName: venueName,
+              ),
               loading: () => const SliverFillRemaining(
                 hasScrollBody: false,
                 child: LoadingIndicator(),
@@ -121,9 +137,13 @@ class _SlotsSection extends StatelessWidget {
                 ),
               );
             }
-            final day = days[index - 1];
+            final dayIndex = index - 1;
+            final day = days[dayIndex];
             final daySlots = grouped[day]!;
-            return _DayBlock(day: day, slots: daySlots);
+            return StaggeredEntrance(
+              index: dayIndex,
+              child: _DayBlock(day: day, slots: daySlots),
+            );
           },
           childCount: days.length + 1,
         ),

@@ -5,6 +5,7 @@ import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_theme.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../shared/widgets/design_system.dart';
+import '../../../shared/widgets/motion.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../../auth/providers/auth_state.dart';
 import '../../bookings/providers/booking_providers.dart';
@@ -37,89 +38,57 @@ class ProfileScreen extends ConsumerWidget {
             const DisplayHeadline('Account &\nactivity.'),
             const SizedBox(height: 24),
 
-            // ID card
-            Container(
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: AppColors.border, width: 0.5),
-              ),
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      InitialsAvatar(user?.fullName ?? '', size: 54),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              user?.fullName ?? 'Guest',
-                              style: AppTypography.title.copyWith(fontSize: 18),
-                            ),
-                            const SizedBox(height: 6),
-                            StatusPill(user?.role ?? 'Member'),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 18),
-                  const Divider(),
-                  const SizedBox(height: 14),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.mail_outline,
-                        size: 16,
-                        color: AppColors.textSecondary,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          user?.email ?? '—',
-                          style: AppTypography.bodyMuted,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+            StaggeredEntrance(
+              index: 0,
+              child: _IdCard(
+                fullName: user?.fullName ?? 'Guest',
+                role: user?.role ?? 'Member',
+                email: user?.email ?? '—',
               ),
             ),
 
             const SizedBox(height: 26),
             const Text('YOUR ACTIVITY', style: AppTypography.sectionLabel),
             const SizedBox(height: 10),
-            bookingsAsync.when(
-              data: (data) => _StatRow(
-                upcoming: data.upcoming.length,
-                total: data.upcoming.length + data.past.length,
+            StaggeredEntrance(
+              index: 1,
+              child: bookingsAsync.when(
+                data: (data) => _StatRow(
+                  upcoming: data.upcoming.length,
+                  total: data.upcoming.length + data.past.length,
+                ),
+                loading: () => const _StatRow(upcoming: 0, total: 0, isLoading: true),
+                error: (_, __) => const _StatRow(upcoming: 0, total: 0),
               ),
-              loading: () => const _StatRow(upcoming: 0, total: 0, isLoading: true),
-              error: (_, __) => const _StatRow(upcoming: 0, total: 0),
             ),
 
             const SizedBox(height: 26),
             const Text('SETTINGS', style: AppTypography.sectionLabel),
             const SizedBox(height: 10),
-            _SettingRow(
-              label: 'Bookings',
-              meta: 'Manage your slots',
-              onTap: () => context.push(AppRoutes.bookings),
+            StaggeredEntrance(
+              index: 2,
+              child: _SettingRow(
+                label: 'Bookings',
+                meta: 'Manage your slots',
+                onTap: () => context.push(AppRoutes.bookings),
+              ),
             ),
-            _SettingRow(
-              label: 'About',
-              meta: 'Version 1.0.0',
-              onTap: () => _showAboutSheet(context),
+            StaggeredEntrance(
+              index: 3,
+              child: _SettingRow(
+                label: 'About',
+                meta: 'Version 1.0.0',
+                onTap: () => _showAboutSheet(context),
+              ),
             ),
-            _SettingRow(
-              label: 'Sign out',
-              meta: 'End your session',
-              destructive: true,
-              onTap: () => _confirmSignOut(context, ref),
+            StaggeredEntrance(
+              index: 4,
+              child: _SettingRow(
+                label: 'Sign out',
+                meta: 'End your session',
+                destructive: true,
+                onTap: () => _confirmSignOut(context, ref),
+              ),
             ),
           ],
         ),
@@ -230,6 +199,59 @@ class ProfileScreen extends ConsumerWidget {
   }
 }
 
+class _IdCard extends StatelessWidget {
+  const _IdCard({required this.fullName, required this.role, required this.email});
+  final String fullName;
+  final String role;
+  final String email;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: AppColors.border, width: 0.5),
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              InitialsAvatar(fullName, size: 54),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      fullName,
+                      style: AppTypography.title.copyWith(fontSize: 18),
+                    ),
+                    const SizedBox(height: 6),
+                    StatusPill(role),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          const Divider(),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              const Icon(Icons.mail_outline, size: 16, color: AppColors.textSecondary),
+              const SizedBox(width: 8),
+              Expanded(child: Text(email, style: AppTypography.bodyMuted)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _StatRow extends StatelessWidget {
   const _StatRow({
     required this.upcoming,
@@ -245,9 +267,9 @@ class _StatRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: _StatCard(eyebrow: 'Upcoming', value: '$upcoming', sub: 'slots booked', isLoading: isLoading)),
+        Expanded(child: _StatCard(eyebrow: 'Upcoming', value: upcoming, sub: 'slots booked', isLoading: isLoading)),
         const SizedBox(width: 8),
-        Expanded(child: _StatCard(eyebrow: 'All-time', value: '$total', sub: 'bookings made', isLoading: isLoading)),
+        Expanded(child: _StatCard(eyebrow: 'All-time', value: total, sub: 'bookings made', isLoading: isLoading)),
       ],
     );
   }
@@ -262,12 +284,18 @@ class _StatCard extends StatelessWidget {
   });
 
   final String eyebrow;
-  final String value;
+  final int value;
   final String sub;
   final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
+    final numberStyle = AppTypography.stat.copyWith(
+      fontFamily: 'Fraunces',
+      fontSize: 28,
+      fontWeight: FontWeight.w400,
+    );
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
@@ -280,14 +308,9 @@ class _StatCard extends StatelessWidget {
         children: [
           Eyebrow(eyebrow),
           const SizedBox(height: 8),
-          Text(
-            isLoading ? '–' : value,
-            style: AppTypography.stat.copyWith(
-              fontFamily: 'Fraunces',
-              fontSize: 28,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
+          isLoading
+              ? Text('–', style: numberStyle)
+              : AnimatedNumber(value: value, style: numberStyle),
           const SizedBox(height: 2),
           Text(sub, style: AppTypography.meta),
         ],
@@ -318,36 +341,32 @@ class _SettingRow extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
-      child: Material(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.border, width: 0.5),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        label,
-                        style: AppTypography.title.copyWith(fontSize: 14, color: color),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(meta, style: AppTypography.meta.copyWith(color: metaColor)),
-                    ],
-                  ),
+      child: PressableScale(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.border, width: 0.5),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      style: AppTypography.title.copyWith(fontSize: 14, color: color),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(meta, style: AppTypography.meta.copyWith(color: metaColor)),
+                  ],
                 ),
-                Icon(Icons.chevron_right, size: 18, color: color.withOpacity(0.6)),
-              ],
-            ),
+              ),
+              Icon(Icons.chevron_right, size: 18, color: color.withOpacity(0.6)),
+            ],
           ),
         ),
       ),

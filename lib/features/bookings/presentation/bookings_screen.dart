@@ -7,6 +7,7 @@ import '../../../core/router/app_routes.dart';
 import '../../../shared/extensions/extensions.dart';
 import '../../../shared/widgets/date_block.dart';
 import '../../../shared/widgets/design_system.dart';
+import '../../../shared/widgets/motion.dart';
 import '../../../shared/widgets/shared_widgets.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../../auth/providers/auth_state.dart';
@@ -51,13 +52,10 @@ class BookingsScreen extends ConsumerWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 22),
                     sliver: SliverToBoxAdapter(
                       child: bookingsAsync.when(
-                        data: (data) => SummaryStats(items: [
-                          (value: data.upcoming.length.toString(), label: 'Upcoming'),
-                          (
-                            value: (data.upcoming.length + data.past.length).toString(),
-                            label: 'In total',
-                          ),
-                        ]),
+                        data: (data) => _AnimatedSummary(
+                          upcoming: data.upcoming.length,
+                          total: data.upcoming.length + data.past.length,
+                        ),
                         loading: () => const SizedBox(height: 80),
                         error: (_, __) => const SizedBox(height: 0),
                       ),
@@ -77,7 +75,6 @@ class BookingsScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  // Bottom space so the floating button doesn't cover the last booking
                   const SliverPadding(padding: EdgeInsets.only(bottom: 90)),
                 ],
               ),
@@ -100,6 +97,49 @@ class BookingsScreen extends ConsumerWidget {
   }
 }
 
+class _AnimatedSummary extends StatelessWidget {
+  const _AnimatedSummary({required this.upcoming, required this.total});
+  final int upcoming;
+  final int total;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 18),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: AppColors.borderStrong, width: 0.5),
+        ),
+      ),
+      child: Row(
+        children: [
+          _AnimatedStat(value: upcoming, label: 'Upcoming'),
+          const SizedBox(width: 28),
+          _AnimatedStat(value: total, label: 'In total'),
+        ],
+      ),
+    );
+  }
+}
+
+class _AnimatedStat extends StatelessWidget {
+  const _AnimatedStat({required this.value, required this.label});
+  final int value;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AnimatedNumber(value: value, style: AppTypography.stat),
+        const SizedBox(height: 2),
+        Text(label, style: AppTypography.meta),
+      ],
+    );
+  }
+}
+
 class _BookingsList extends StatelessWidget {
   const _BookingsList({required this.upcoming, required this.past});
   final List<Booking> upcoming;
@@ -116,21 +156,31 @@ class _BookingsList extends StatelessWidget {
       );
     }
 
+    final children = <Widget>[];
+    var index = 0;
+
+    if (upcoming.isNotEmpty) {
+      children.add(SectionLabel('Upcoming — ${upcoming.length}'));
+      for (final booking in upcoming) {
+        children.add(StaggeredEntrance(
+          index: index++,
+          child: _BookingRow(booking: booking, isUpcoming: true),
+        ));
+      }
+    }
+    if (past.isNotEmpty) {
+      children.add(const SectionLabel('Past'));
+      for (final booking in past) {
+        children.add(StaggeredEntrance(
+          index: index++,
+          child: _BookingRow(booking: booking, isUpcoming: false),
+        ));
+      }
+    }
+
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 22),
-      sliver: SliverList(
-        delegate: SliverChildListDelegate([
-          if (upcoming.isNotEmpty) ...[
-            SectionLabel('Upcoming — ${upcoming.length}'),
-            for (final booking in upcoming)
-              _BookingRow(booking: booking, isUpcoming: true),
-          ],
-          if (past.isNotEmpty) ...[
-            const SectionLabel('Past'),
-            for (final booking in past) _BookingRow(booking: booking, isUpcoming: false),
-          ],
-        ]),
-      ),
+      sliver: SliverList(delegate: SliverChildListDelegate(children)),
     );
   }
 }
@@ -144,73 +194,74 @@ class _BookingRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final statusColor = booking.isCancelled ? AppColors.textSecondary : AppColors.success;
     final statusBg = booking.isCancelled ? AppColors.border : const Color(0x1A1D9E75);
+    final canCancel = isUpcoming && booking.isConfirmed;
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: Material(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          onTap: isUpcoming && booking.isConfirmed ? () => _showCancelSheet(context, ref) : null,
-          borderRadius: BorderRadius.circular(12),
-          child: Stack(
+    final card = Stack(
+      children: [
+        if (canCancel)
+          Positioned(
+            left: 0,
+            top: 14,
+            bottom: 14,
+            child: Container(
+              width: 2,
+              decoration: BoxDecoration(
+                color: AppColors.accent,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+        Container(
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            border: Border.all(color: AppColors.border, width: 0.5),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.fromLTRB(18, 14, 16, 14),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (isUpcoming && booking.isConfirmed)
-                Positioned(
-                  left: 0,
-                  top: 14,
-                  bottom: 14,
-                  child: Container(
-                    width: 2,
-                    decoration: BoxDecoration(
-                      color: AppColors.accent,
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                ),
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.border, width: 0.5),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                padding: const EdgeInsets.fromLTRB(18, 14, 16, 14),
-                child: Row(
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(booking.venueName, style: AppTypography.title),
-                          const SizedBox(height: 2),
-                          Text(
-                            '${booking.dayOfWeek} · ${booking.timeRange}',
-                            style: AppTypography.bodyMuted,
-                          ),
-                          const SizedBox(height: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                            decoration: BoxDecoration(
-                              color: statusBg,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            child: Text(
-                              booking.status.toUpperCase(),
-                              style: AppTypography.pill.copyWith(color: statusColor),
-                            ),
-                          ),
-                        ],
+                    Text(booking.venueName, style: AppTypography.title),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${booking.dayOfWeek} · ${booking.timeRange}',
+                      style: AppTypography.bodyMuted,
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: statusBg,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        booking.status.toUpperCase(),
+                        style: AppTypography.pill.copyWith(color: statusColor),
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    DateBlock(date: booking.bookingDateTime),
                   ],
                 ),
               ),
+              const SizedBox(width: 12),
+              DateBlock(date: booking.bookingDateTime),
             ],
           ),
         ),
-      ),
+      ],
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: canCancel
+          ? PressableScale(
+              onTap: () => _showCancelSheet(context, ref),
+              child: card,
+            )
+          : card,
     );
   }
 
@@ -284,31 +335,37 @@ class _BookSlotButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.textPrimary.withOpacity(0.12),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.textPrimary,
-          foregroundColor: AppColors.surface,
-          minimumSize: const Size.fromHeight(54),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    return PressableScale(
+      onTap: onPressed,
+      scale: 0.97,
+      child: Container(
+        height: 54,
+        decoration: BoxDecoration(
+          color: AppColors.textPrimary,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.textPrimary.withOpacity(0.12),
+              blurRadius: 16,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [
-            Icon(Icons.add, size: 18),
+            Icon(Icons.add, size: 18, color: AppColors.surface),
             SizedBox(width: 8),
-            Text('Book a new slot'),
+            Text(
+              'Book a new slot',
+              style: TextStyle(
+                color: AppColors.surface,
+                fontFamily: 'Inter',
+                fontSize: 15,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0.1,
+              ),
+            ),
           ],
         ),
       ),
