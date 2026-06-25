@@ -6,18 +6,10 @@ import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
 import '../../features/auth/providers/auth_providers.dart';
 import '../../features/auth/providers/auth_state.dart';
+import '../../features/bookings/presentation/bookings_screen.dart';
+import '../../features/bookings/presentation/new_booking_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
 import '../../features/venues/presentation/venues_screen.dart';
-
-class _PlaceholderScreen extends StatelessWidget {
-  const _PlaceholderScreen(this.title);
-  final String title;
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: Text(title)),
-        body: Center(child: Text(title)),
-      );
-}
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authNotifierProvider);
@@ -60,12 +52,12 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.bookings,
         name: 'bookings',
-        builder: (context, state) => const _PlaceholderScreen('Bookings'),
+        builder: (context, state) => const BookingsScreen(),
       ),
       GoRoute(
         path: AppRoutes.newBooking,
         name: 'newBooking',
-        builder: (context, state) => const _PlaceholderScreen('New Booking'),
+        builder: (context, state) => const NewBookingScreen(),
       ),
     ],
   );
