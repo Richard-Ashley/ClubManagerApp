@@ -29,8 +29,8 @@ class HomeScreen extends ConsumerWidget {
                 eyebrow: 'Welcome',
                 title: 'Hello,\n$firstName.',
                 trailing: GestureDetector(
-                  onTap: () => ref.read(authNotifierProvider.notifier).logout(),
-                  child: const Icon(Icons.logout, size: 22, color: AppColors.textSecondary),
+                  onTap: () => context.push(AppRoutes.profile),
+                  child: InitialsAvatar(user?.fullName ?? ''),
                 ),
               ),
               const SizedBox(height: 36),

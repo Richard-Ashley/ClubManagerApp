@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/router/app_routes.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_theme.dart';
 import '../../../shared/extensions/extensions.dart';
@@ -37,7 +38,10 @@ class VenuesScreen extends ConsumerWidget {
                   child: ScreenHeader(
                     eyebrow: 'Venues',
                     title: 'Pick a place\nto play.',
-                    trailing: InitialsAvatar(userName),
+                    trailing: GestureDetector(
+                      onTap: () => context.push(AppRoutes.profile),
+                      child: InitialsAvatar(userName),
+                    ),
                   ),
                 ),
               ),

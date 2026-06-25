@@ -9,6 +9,7 @@ import '../../features/auth/providers/auth_state.dart';
 import '../../features/bookings/presentation/bookings_screen.dart';
 import '../../features/bookings/presentation/new_booking_screen.dart';
 import '../../features/home/presentation/home_screen.dart';
+import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/venues/presentation/venues_screen.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -58,6 +59,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.newBooking,
         name: 'newBooking',
         builder: (context, state) => const NewBookingScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.profile,
+        name: 'profile',
+        builder: (context, state) => const ProfileScreen(),
       ),
     ],
   );

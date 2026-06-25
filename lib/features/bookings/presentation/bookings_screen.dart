@@ -40,7 +40,10 @@ class BookingsScreen extends ConsumerWidget {
                       child: ScreenHeader(
                         eyebrow: 'Bookings',
                         title: 'Your slots,\nyour days.',
-                        trailing: InitialsAvatar(userName),
+                        trailing: GestureDetector(
+                          onTap: () => context.push(AppRoutes.profile),
+                          child: InitialsAvatar(userName),
+                        ),
                       ),
                     ),
                   ),

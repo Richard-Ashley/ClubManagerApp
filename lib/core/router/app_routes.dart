@@ -8,4 +8,5 @@ class AppRoutes {
   static const String venueDetail = '/venues/:id';
   static const String bookings = '/bookings';
   static const String newBooking = '/bookings/new';
+  static const String profile = '/profile';
 }
