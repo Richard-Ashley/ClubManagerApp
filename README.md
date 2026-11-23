@@ -39,9 +39,34 @@ lib/
 ### Prerequisites
 
 - [Flutter SDK](https://docs.flutter.dev/get-started/install) 3.x
-- Running instance of [ClubManagementApi](https://github.com/Richard-Ashley/ClubManagementApi)
+- [.NET 8 SDK](https://dotnet.microsoft.com/download) to run [ClubManagementApi](https://github.com/Richard-Ashley/ClubManagementApi)
 
-### Setup
+### Running locally
+
+This app talks to [ClubManagementApi](https://github.com/Richard-Ashley/ClubManagementApi). Start the API first. It applies its own migrations and seed data on startup:
+
+```bash
+git clone https://github.com/Richard-Ashley/ClubManagementApi.git
+cd ClubManagementApi
+
+# The API refuses to start without a signing key. Generate your own:
+openssl rand -base64 64
+dotnet user-secrets set "Jwt:Key" "<paste the generated key>"
+
+dotnet run
+```
+
+The API listens on `http://localhost:5014` (and `https://localhost:7190`).
+
+Then set `baseUrl` in `lib/core/constants/app_constants.dart` to match your target:
+
+| Target | `baseUrl` |
+|---|---|
+| Android emulator | `http://10.0.2.2:5014` |
+| iOS simulator | `https://localhost:7190` |
+| Physical device | `http://YOUR_LOCAL_IP:5014` |
+
+Then run the app:
 
 ```bash
 git clone https://github.com/Richard-Ashley/ClubManagerApp.git
@@ -49,8 +74,6 @@ cd ClubManagerApp
 flutter pub get
 flutter run
 ```
-
-Update `lib/core/constants/app_constants.dart` with your API base URL.
 
 ## Screens
 
