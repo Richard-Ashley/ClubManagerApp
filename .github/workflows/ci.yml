@@ -20,10 +20,12 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          flutter-version: 3.44.2
           cache: true
-          # No flutter-version pin: deliberate. The repo tracks the latest stable Flutter
-          # release, so a new Flutter release can change CI results without a code change.
-          # Pin a version here if reproducibility becomes more important than freshness.
+          # Pinned to the version the code was verified on. An unpinned "stable" resolved to
+          # 3.50.1 on the first run, where package:flutter/material.dart is deprecated in
+          # favour of material_ui, and "flutter analyze --fatal-infos" failed with no code
+          # change. Bump this deliberately, together with any resulting migration.
 
       - name: Print Flutter version
         run: flutter --version
