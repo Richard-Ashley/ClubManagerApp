@@ -67,7 +67,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 const SizedBox(height: 8),
                 const DisplayHeadline('Sign in to\nyour club.'),
                 const SizedBox(height: 8),
-                Text(
+                const Text(
                   'One account for venues, slots, and bookings.',
                   style: AppTypography.bodyMuted,
                 ),

@@ -314,11 +314,13 @@ class _BookingRow extends ConsumerWidget {
                         .read(bookingRepositoryProvider)
                         .cancel(booking.id);
                     ref.invalidate(myBookingsProvider);
-                    if (context.mounted)
+                    if (context.mounted) {
                       context.showSnackBar('Booking cancelled.');
+                    }
                   } catch (e) {
-                    if (context.mounted)
+                    if (context.mounted) {
                       context.showErrorSnackBar(e.toString());
+                    }
                   }
                 },
                 style:
@@ -354,15 +356,15 @@ class _BookSlotButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: AppColors.textPrimary.withOpacity(0.12),
+              color: AppColors.textPrimary.withValues(alpha: 0.12),
               blurRadius: 16,
               offset: const Offset(0, 4),
             ),
           ],
         ),
-        child: Row(
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Icon(Icons.add, size: 18, color: AppColors.surface),
             SizedBox(width: 8),
             Text(

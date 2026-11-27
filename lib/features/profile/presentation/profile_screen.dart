@@ -124,7 +124,7 @@ class ProfileScreen extends ConsumerWidget {
               Text('Club Manager',
                   style: AppTypography.display.copyWith(fontSize: 22)),
               const SizedBox(height: 12),
-              Text(
+              const Text(
                 'A booking app for clubs and venues. Built with Flutter, '
                 'connected to a .NET 8 backend with JWT auth and SQLite.',
                 style: AppTypography.bodyMuted,
@@ -132,7 +132,7 @@ class ProfileScreen extends ConsumerWidget {
               const SizedBox(height: 18),
               const Text('VERSION', style: AppTypography.sectionLabel),
               const SizedBox(height: 4),
-              Text('1.0.0', style: AppTypography.body),
+              const Text('1.0.0', style: AppTypography.body),
             ],
           ),
         ),
@@ -172,7 +172,7 @@ class ProfileScreen extends ConsumerWidget {
                 style: AppTypography.display.copyWith(fontSize: 22),
               ),
               const SizedBox(height: 6),
-              Text(
+              const Text(
                 'You will need to sign in again to manage bookings.',
                 style: AppTypography.bodyMuted,
               ),
@@ -348,7 +348,7 @@ class _SettingRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = destructive ? AppColors.error : AppColors.textPrimary;
     final metaColor = destructive
-        ? AppColors.error.withOpacity(0.65)
+        ? AppColors.error.withValues(alpha: 0.65)
         : AppColors.textSecondary;
 
     return Padding(
@@ -380,7 +380,7 @@ class _SettingRow extends StatelessWidget {
                 ),
               ),
               Icon(Icons.chevron_right,
-                  size: 18, color: color.withOpacity(0.6)),
+                  size: 18, color: color.withValues(alpha: 0.6)),
             ],
           ),
         ),

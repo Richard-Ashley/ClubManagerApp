@@ -10,23 +10,22 @@ class AppException implements Exception {
 
 class UnauthorizedException extends AppException {
   const UnauthorizedException(
-      [String message = 'Session expired. Please log in again.'])
-      : super(message, statusCode: 401);
+      [super.message = 'Session expired. Please log in again.'])
+      : super(statusCode: 401);
 }
 
 class NotFoundException extends AppException {
-  const NotFoundException([String message = 'Resource not found.'])
-      : super(message, statusCode: 404);
+  const NotFoundException([super.message = 'Resource not found.'])
+      : super(statusCode: 404);
 }
 
 class ConflictException extends AppException {
   const ConflictException(
-      [String message = 'This action conflicts with existing data.'])
-      : super(message, statusCode: 409);
+      [super.message = 'This action conflicts with existing data.'])
+      : super(statusCode: 409);
 }
 
 class NetworkException extends AppException {
   const NetworkException(
-      [String message = 'Network error. Check your connection.'])
-      : super(message);
+      [super.message = 'Network error. Check your connection.']);
 }

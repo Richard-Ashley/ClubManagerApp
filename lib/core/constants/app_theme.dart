@@ -98,8 +98,6 @@ class AppTheme {
           onSecondary: Colors.white,
           surface: AppColors.surface,
           onSurface: AppColors.textPrimary,
-          background: AppColors.background,
-          onBackground: AppColors.textPrimary,
           error: AppColors.error,
           onError: Colors.white,
         ),

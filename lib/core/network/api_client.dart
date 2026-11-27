@@ -80,7 +80,7 @@ class ApiClient {
     return switch (statusCode) {
       400 => AppException(message, statusCode: 400),
       401 => UnauthorizedException(message),
-      403 => AppException('Access denied.', statusCode: 403),
+      403 => const AppException('Access denied.', statusCode: 403),
       404 => NotFoundException(message),
       409 => ConflictException(message),
       _ => e.type == DioExceptionType.connectionTimeout ||
