@@ -1,5 +1,7 @@
 # Club Manager App
 
+[![CI](https://github.com/Richard-Ashley/ClubManagerApp/actions/workflows/ci.yml/badge.svg)](https://github.com/Richard-Ashley/ClubManagerApp/actions/workflows/ci.yml)
+
 A Flutter mobile app for managing club venues and bookings — connects to the [Club Management API](https://github.com/Richard-Ashley/ClubManagementApi).
 
 ## Tech stack
