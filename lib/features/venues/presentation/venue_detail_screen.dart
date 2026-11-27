@@ -96,7 +96,13 @@ class _SlotsSection extends StatelessWidget {
   final String venueName;
 
   static const _dayOrder = [
-    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
   ];
 
   @override
@@ -127,7 +133,8 @@ class _SlotsSection extends StatelessWidget {
                   children: [
                     Text(
                       '${slots.length} slots',
-                      style: AppTypography.meta.copyWith(color: AppColors.textPrimary),
+                      style: AppTypography.meta
+                          .copyWith(color: AppColors.textPrimary),
                     ),
                     const SizedBox(width: 8),
                     const MetaDot(),

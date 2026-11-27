@@ -74,7 +74,8 @@ class ApiClient {
     if (e.error is AppException) return e.error as AppException;
 
     final statusCode = e.response?.statusCode;
-    final message = _extractMessage(e.response?.data) ?? e.message ?? 'Unknown error';
+    final message =
+        _extractMessage(e.response?.data) ?? e.message ?? 'Unknown error';
 
     return switch (statusCode) {
       400 => AppException(message, statusCode: 400),
@@ -82,8 +83,8 @@ class ApiClient {
       403 => AppException('Access denied.', statusCode: 403),
       404 => NotFoundException(message),
       409 => ConflictException(message),
-      _   => e.type == DioExceptionType.connectionTimeout ||
-             e.type == DioExceptionType.receiveTimeout
+      _ => e.type == DioExceptionType.connectionTimeout ||
+              e.type == DioExceptionType.receiveTimeout
           ? const NetworkException()
           : AppException(message),
     };

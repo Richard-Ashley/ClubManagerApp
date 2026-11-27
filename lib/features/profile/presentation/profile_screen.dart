@@ -37,7 +37,6 @@ class ProfileScreen extends ConsumerWidget {
             const SizedBox(height: 6),
             const DisplayHeadline('Account &\nactivity.'),
             const SizedBox(height: 24),
-
             StaggeredEntrance(
               index: 0,
               child: _IdCard(
@@ -46,7 +45,6 @@ class ProfileScreen extends ConsumerWidget {
                 email: user?.email ?? '—',
               ),
             ),
-
             const SizedBox(height: 26),
             const Text('YOUR ACTIVITY', style: AppTypography.sectionLabel),
             const SizedBox(height: 10),
@@ -57,11 +55,11 @@ class ProfileScreen extends ConsumerWidget {
                   upcoming: data.upcoming.length,
                   total: data.upcoming.length + data.past.length,
                 ),
-                loading: () => const _StatRow(upcoming: 0, total: 0, isLoading: true),
+                loading: () =>
+                    const _StatRow(upcoming: 0, total: 0, isLoading: true),
                 error: (_, __) => const _StatRow(upcoming: 0, total: 0),
               ),
             ),
-
             const SizedBox(height: 26),
             const Text('SETTINGS', style: AppTypography.sectionLabel),
             const SizedBox(height: 10),
@@ -123,7 +121,8 @@ class ProfileScreen extends ConsumerWidget {
               const SizedBox(height: 18),
               const Eyebrow('About'),
               const SizedBox(height: 6),
-              Text('Club Manager', style: AppTypography.display.copyWith(fontSize: 22)),
+              Text('Club Manager',
+                  style: AppTypography.display.copyWith(fontSize: 22)),
               const SizedBox(height: 12),
               Text(
                 'A booking app for clubs and venues. Built with Flutter, '
@@ -183,7 +182,8 @@ class ProfileScreen extends ConsumerWidget {
                   Navigator.of(ctx).pop();
                   ref.read(authNotifierProvider.notifier).logout();
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: AppColors.error),
                 child: const Text('Sign out'),
               ),
               const SizedBox(height: 6),
@@ -200,7 +200,8 @@ class ProfileScreen extends ConsumerWidget {
 }
 
 class _IdCard extends StatelessWidget {
-  const _IdCard({required this.fullName, required this.role, required this.email});
+  const _IdCard(
+      {required this.fullName, required this.role, required this.email});
   final String fullName;
   final String role;
   final String email;
@@ -241,7 +242,8 @@ class _IdCard extends StatelessWidget {
           const SizedBox(height: 14),
           Row(
             children: [
-              const Icon(Icons.mail_outline, size: 16, color: AppColors.textSecondary),
+              const Icon(Icons.mail_outline,
+                  size: 16, color: AppColors.textSecondary),
               const SizedBox(width: 8),
               Expanded(child: Text(email, style: AppTypography.bodyMuted)),
             ],
@@ -267,9 +269,19 @@ class _StatRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: _StatCard(eyebrow: 'Upcoming', value: upcoming, sub: 'slots booked', isLoading: isLoading)),
+        Expanded(
+            child: _StatCard(
+                eyebrow: 'Upcoming',
+                value: upcoming,
+                sub: 'slots booked',
+                isLoading: isLoading)),
         const SizedBox(width: 8),
-        Expanded(child: _StatCard(eyebrow: 'All-time', value: total, sub: 'bookings made', isLoading: isLoading)),
+        Expanded(
+            child: _StatCard(
+                eyebrow: 'All-time',
+                value: total,
+                sub: 'bookings made',
+                isLoading: isLoading)),
       ],
     );
   }
@@ -358,14 +370,17 @@ class _SettingRow extends StatelessWidget {
                   children: [
                     Text(
                       label,
-                      style: AppTypography.title.copyWith(fontSize: 14, color: color),
+                      style: AppTypography.title
+                          .copyWith(fontSize: 14, color: color),
                     ),
                     const SizedBox(height: 2),
-                    Text(meta, style: AppTypography.meta.copyWith(color: metaColor)),
+                    Text(meta,
+                        style: AppTypography.meta.copyWith(color: metaColor)),
                   ],
                 ),
               ),
-              Icon(Icons.chevron_right, size: 18, color: color.withOpacity(0.6)),
+              Icon(Icons.chevron_right,
+                  size: 18, color: color.withOpacity(0.6)),
             ],
           ),
         ),

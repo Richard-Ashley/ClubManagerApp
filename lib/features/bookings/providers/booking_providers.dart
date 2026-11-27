@@ -14,7 +14,8 @@ final myBookingsProvider = FutureProvider<List<Booking>>((ref) {
 });
 
 /// Splits bookings into upcoming + past, each sorted appropriately.
-final bookingsBucketedProvider = FutureProvider<({List<Booking> upcoming, List<Booking> past})>((ref) async {
+final bookingsBucketedProvider =
+    FutureProvider<({List<Booking> upcoming, List<Booking> past})>((ref) async {
   final bookings = await ref.watch(myBookingsProvider.future);
 
   final upcoming = bookings.where((b) => b.isUpcoming).toList()

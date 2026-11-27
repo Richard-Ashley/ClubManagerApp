@@ -96,8 +96,10 @@ class _StepVenue extends ConsumerWidget {
             return ListItemCard(
               title: venue.name,
               subtitle: venue.description.isEmpty ? '—' : venue.description,
-              trailing: const Icon(Icons.arrow_forward, size: 18, color: AppColors.textPrimary),
-              onTap: () => ref.read(newBookingProvider.notifier).pickVenue(venue),
+              trailing: const Icon(Icons.arrow_forward,
+                  size: 18, color: AppColors.textPrimary),
+              onTap: () =>
+                  ref.read(newBookingProvider.notifier).pickVenue(venue),
             );
           },
         );
@@ -117,7 +119,13 @@ class _StepDate extends ConsumerWidget {
   const _StepDate();
 
   static const _dayOrder = [
-    'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
   ];
 
   @override
@@ -129,7 +137,8 @@ class _StepDate extends ConsumerWidget {
     return slotsAsync.when(
       data: (slots) {
         if (slots.isEmpty) {
-          return const EmptyStateView(message: 'No slots configured for this venue.');
+          return const EmptyStateView(
+              message: 'No slots configured for this venue.');
         }
 
         // Compute next 12 candidate dates that match any slot's day-of-week
@@ -140,7 +149,9 @@ class _StepDate extends ConsumerWidget {
         final selectedDate = state.date;
         final slotsForSelectedDate = selectedDate == null
             ? <VenueSlot>[]
-            : slots.where((s) => s.dayOfWeek == _weekdayName(selectedDate)).toList();
+            : slots
+                .where((s) => s.dayOfWeek == _weekdayName(selectedDate))
+                .toList();
 
         return ListView(
           padding: const EdgeInsets.fromLTRB(22, 0, 22, 22),
@@ -150,7 +161,8 @@ class _StepDate extends ConsumerWidget {
               title: venue.name,
               subtitle: venue.description.isEmpty ? '—' : venue.description,
               trailing: TextButton(
-                onPressed: () => ref.read(newBookingProvider.notifier).goToStep(1),
+                onPressed: () =>
+                    ref.read(newBookingProvider.notifier).goToStep(1),
                 child: const Text('Change'),
               ),
             ),
@@ -175,7 +187,8 @@ class _StepDate extends ConsumerWidget {
                 return _DayPill(
                   date: date,
                   isSelected: isSelected,
-                  onTap: () => ref.read(newBookingProvider.notifier).pickDate(date),
+                  onTap: () =>
+                      ref.read(newBookingProvider.notifier).pickDate(date),
                 );
               },
             ),
@@ -185,7 +198,8 @@ class _StepDate extends ConsumerWidget {
                 _SelectableSlot(
                   slot: slot,
                   isSelected: state.slot?.id == slot.id,
-                  onTap: () => ref.read(newBookingProvider.notifier).pickSlot(slot),
+                  onTap: () =>
+                      ref.read(newBookingProvider.notifier).pickSlot(slot),
                 ),
             ],
           ],
@@ -212,12 +226,12 @@ class _StepDate extends ConsumerWidget {
     return result;
   }
 
-  static String _weekdayName(DateTime date) =>
-      _dayOrder[date.weekday - 1];
+  static String _weekdayName(DateTime date) => _dayOrder[date.weekday - 1];
 }
 
 class _DayPill extends StatelessWidget {
-  const _DayPill({required this.date, required this.isSelected, required this.onTap});
+  const _DayPill(
+      {required this.date, required this.isSelected, required this.onTap});
   final DateTime date;
   final bool isSelected;
   final VoidCallback onTap;
@@ -249,7 +263,8 @@ class _DayPill extends StatelessWidget {
 }
 
 class _SelectableSlot extends StatelessWidget {
-  const _SelectableSlot({required this.slot, required this.isSelected, required this.onTap});
+  const _SelectableSlot(
+      {required this.slot, required this.isSelected, required this.onTap});
   final VenueSlot slot;
   final bool isSelected;
   final VoidCallback onTap;
@@ -279,12 +294,14 @@ class _SelectableSlot extends StatelessWidget {
                   width: 6,
                   height: 6,
                   decoration: BoxDecoration(
-                    color: isSelected ? AppColors.accent : AppColors.textTertiary,
+                    color:
+                        isSelected ? AppColors.accent : AppColors.textTertiary,
                     shape: BoxShape.circle,
                   ),
                 ),
                 const SizedBox(width: 12),
-                Expanded(child: Text(slot.timeRange, style: AppTypography.body)),
+                Expanded(
+                    child: Text(slot.timeRange, style: AppTypography.body)),
                 Text(
                   isSelected ? 'Selected' : 'Free',
                   style: AppTypography.meta.copyWith(
@@ -370,9 +387,12 @@ class _StepConfirmState extends ConsumerState<_StepConfirm> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(venue.name, style: AppTypography.title.copyWith(fontSize: 20)),
+                                Text(venue.name,
+                                    style: AppTypography.title
+                                        .copyWith(fontSize: 20)),
                                 const SizedBox(height: 2),
-                                Text(venue.description, style: AppTypography.bodyMuted),
+                                Text(venue.description,
+                                    style: AppTypography.bodyMuted),
                               ],
                             ),
                           ),
@@ -401,7 +421,9 @@ class _StepConfirmState extends ConsumerState<_StepConfirm> {
           AppButton(
             label: 'Back',
             variant: AppButtonVariant.text,
-            onPressed: _submitting ? null : () => ref.read(newBookingProvider.notifier).back(),
+            onPressed: _submitting
+                ? null
+                : () => ref.read(newBookingProvider.notifier).back(),
           ),
         ],
       ),

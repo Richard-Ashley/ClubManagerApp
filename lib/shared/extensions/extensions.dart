@@ -37,5 +37,6 @@ extension BuildContextExtensions on BuildContext {
     );
   }
 
-  void showErrorSnackBar(String message) => showSnackBar(message, isError: true);
+  void showErrorSnackBar(String message) =>
+      showSnackBar(message, isError: true);
 }

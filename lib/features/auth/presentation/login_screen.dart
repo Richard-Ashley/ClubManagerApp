@@ -86,11 +86,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   validator: FieldValidators.password,
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                      _obscurePassword
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
                       size: 20,
                       color: AppColors.textSecondary,
                     ),
-                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                    onPressed: () =>
+                        setState(() => _obscurePassword = !_obscurePassword),
                   ),
                 ),
                 const SizedBox(height: 28),
@@ -103,7 +106,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 AppButton(
                   label: 'Create an account',
                   variant: AppButtonVariant.text,
-                  onPressed: isLoading ? null : () => context.push(AppRoutes.register),
+                  onPressed:
+                      isLoading ? null : () => context.push(AppRoutes.register),
                 ),
               ],
             ),

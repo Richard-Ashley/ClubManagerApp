@@ -5,7 +5,7 @@ class AppTypography {
   AppTypography._();
 
   static const String _displayFont = 'Fraunces';
-  static const String _bodyFont    = 'Inter';
+  static const String _bodyFont = 'Inter';
 
   // Eyebrow — small uppercase label that opens a section
   static const TextStyle eyebrow = TextStyle(
@@ -140,7 +140,8 @@ class AppTheme {
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: AppColors.surface,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(color: AppColors.border, width: 0.5),
@@ -151,7 +152,8 @@ class AppTheme {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide: const BorderSide(color: AppColors.textPrimary, width: 1),
+            borderSide:
+                const BorderSide(color: AppColors.textPrimary, width: 1),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
@@ -166,7 +168,8 @@ class AppTheme {
             foregroundColor: AppColors.surface,
             elevation: 0,
             minimumSize: const Size.fromHeight(52),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             textStyle: const TextStyle(
               fontFamily: 'Inter',
               fontSize: 15,

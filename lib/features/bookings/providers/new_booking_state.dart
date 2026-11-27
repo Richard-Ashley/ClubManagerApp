@@ -31,7 +31,9 @@ class NewBookingState {
   }
 }
 
-final newBookingProvider = StateNotifierProvider.autoDispose<NewBookingNotifier, NewBookingState>((ref) {
+final newBookingProvider =
+    StateNotifierProvider.autoDispose<NewBookingNotifier, NewBookingState>(
+        (ref) {
   return NewBookingNotifier();
 });
 
@@ -39,7 +41,8 @@ class NewBookingNotifier extends StateNotifier<NewBookingState> {
   NewBookingNotifier() : super(const NewBookingState());
 
   void pickVenue(Venue venue) {
-    state = state.copyWith(step: 2, venue: venue, clearDate: true, clearSlot: true);
+    state =
+        state.copyWith(step: 2, venue: venue, clearDate: true, clearSlot: true);
   }
 
   void pickDate(DateTime date) {

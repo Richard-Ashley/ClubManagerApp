@@ -19,7 +19,8 @@ final authNotifierProvider =
 });
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier(this._repository, this._tokenStorage) : super(const AuthInitial()) {
+  AuthNotifier(this._repository, this._tokenStorage)
+      : super(const AuthInitial()) {
     _restoreSession();
   }
 

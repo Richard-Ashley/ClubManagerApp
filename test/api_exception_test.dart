@@ -28,10 +28,13 @@ void main() {
     });
 
     test('have a default user-facing message', () {
-      expect(const UnauthorizedException().message, 'Session expired. Please log in again.');
+      expect(const UnauthorizedException().message,
+          'Session expired. Please log in again.');
       expect(const NotFoundException().message, 'Resource not found.');
-      expect(const ConflictException().message, 'This action conflicts with existing data.');
-      expect(const NetworkException().message, 'Network error. Check your connection.');
+      expect(const ConflictException().message,
+          'This action conflicts with existing data.');
+      expect(const NetworkException().message,
+          'Network error. Check your connection.');
     });
 
     test('accept a custom message', () {

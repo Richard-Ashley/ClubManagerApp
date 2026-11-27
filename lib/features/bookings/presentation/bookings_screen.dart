@@ -62,7 +62,8 @@ class BookingsScreen extends ConsumerWidget {
                     ),
                   ),
                   bookingsAsync.when(
-                    data: (data) => _BookingsList(upcoming: data.upcoming, past: data.past),
+                    data: (data) =>
+                        _BookingsList(upcoming: data.upcoming, past: data.past),
                     loading: () => const SliverFillRemaining(
                       hasScrollBody: false,
                       child: LoadingIndicator(),
@@ -192,8 +193,10 @@ class _BookingRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final statusColor = booking.isCancelled ? AppColors.textSecondary : AppColors.success;
-    final statusBg = booking.isCancelled ? AppColors.border : const Color(0x1A1D9E75);
+    final statusColor =
+        booking.isCancelled ? AppColors.textSecondary : AppColors.success;
+    final statusBg =
+        booking.isCancelled ? AppColors.border : const Color(0x1A1D9E75);
     final canCancel = isUpcoming && booking.isConfirmed;
 
     final card = Stack(
@@ -233,7 +236,8 @@ class _BookingRow extends ConsumerWidget {
                     ),
                     const SizedBox(height: 8),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
                         color: statusBg,
                         borderRadius: BorderRadius.circular(4),
@@ -306,14 +310,19 @@ class _BookingRow extends ConsumerWidget {
                 onPressed: () async {
                   Navigator.of(ctx).pop();
                   try {
-                    await ref.read(bookingRepositoryProvider).cancel(booking.id);
+                    await ref
+                        .read(bookingRepositoryProvider)
+                        .cancel(booking.id);
                     ref.invalidate(myBookingsProvider);
-                    if (context.mounted) context.showSnackBar('Booking cancelled.');
+                    if (context.mounted)
+                      context.showSnackBar('Booking cancelled.');
                   } catch (e) {
-                    if (context.mounted) context.showErrorSnackBar(e.toString());
+                    if (context.mounted)
+                      context.showErrorSnackBar(e.toString());
                   }
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+                style:
+                    ElevatedButton.styleFrom(backgroundColor: AppColors.error),
                 child: const Text('Cancel booking'),
               ),
               const SizedBox(height: 8),

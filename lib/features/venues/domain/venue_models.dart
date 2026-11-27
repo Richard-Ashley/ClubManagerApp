@@ -1,4 +1,4 @@
-﻿class Venue {
+class Venue {
   const Venue({
     required this.id,
     required this.name,

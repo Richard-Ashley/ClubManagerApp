@@ -18,20 +18,30 @@ class DateBlock extends StatelessWidget {
 
   static const _weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   static const _months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
   @override
   Widget build(BuildContext context) {
-    final dayName  = _weekdays[date.weekday - 1].toUpperCase();
-    final dayNum   = date.day.toString().padLeft(2, '0');
+    final dayName = _weekdays[date.weekday - 1].toUpperCase();
+    final dayNum = date.day.toString().padLeft(2, '0');
     final monthName = _months[date.month - 1].toUpperCase();
 
     final (dayFontSize, numFontSize) = switch (size) {
-      DateBlockSize.small  => (8.0, 14.0),
+      DateBlockSize.small => (8.0, 14.0),
       DateBlockSize.medium => (10.0, 20.0),
-      DateBlockSize.large  => (11.0, 28.0),
+      DateBlockSize.large => (11.0, 28.0),
     };
 
     return Column(
@@ -98,7 +108,9 @@ class StepIndicator extends StatelessWidget {
                   child: Container(
                     height: 1,
                     margin: const EdgeInsets.symmetric(horizontal: 6),
-                    color: i < currentStep ? AppColors.accent : AppColors.borderStrong,
+                    color: i < currentStep
+                        ? AppColors.accent
+                        : AppColors.borderStrong,
                   ),
                 ),
             ],
@@ -118,8 +130,12 @@ class StepIndicator extends StatelessWidget {
                             ? TextAlign.end
                             : TextAlign.center,
                     style: AppTypography.meta.copyWith(
-                      color: i + 1 == currentStep ? AppColors.textPrimary : AppColors.textSecondary,
-                      fontWeight: i + 1 == currentStep ? FontWeight.w500 : FontWeight.w400,
+                      color: i + 1 == currentStep
+                          ? AppColors.textPrimary
+                          : AppColors.textSecondary,
+                      fontWeight: i + 1 == currentStep
+                          ? FontWeight.w500
+                          : FontWeight.w400,
                     ),
                   ),
                 ),
@@ -141,9 +157,21 @@ class _Step extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (bg, border, fg) = switch (state) {
-      _StepState.done    => (AppColors.accent,     AppColors.accent,     AppColors.surface),
-      _StepState.active  => (AppColors.textPrimary, AppColors.textPrimary, AppColors.surface),
-      _StepState.pending => (Colors.transparent,   AppColors.borderStrong, AppColors.textSecondary),
+      _StepState.done => (
+          AppColors.accent,
+          AppColors.accent,
+          AppColors.surface
+        ),
+      _StepState.active => (
+          AppColors.textPrimary,
+          AppColors.textPrimary,
+          AppColors.surface
+        ),
+      _StepState.pending => (
+          Colors.transparent,
+          AppColors.borderStrong,
+          AppColors.textSecondary
+        ),
     };
 
     return Container(

@@ -51,7 +51,8 @@ class VenuesScreen extends ConsumerWidget {
                   child: venuesAsync.when(
                     data: (venues) => SummaryStats(items: [
                       (
-                        value: venues.where((v) => v.isActive).length.toString(),
+                        value:
+                            venues.where((v) => v.isActive).length.toString(),
                         label: 'Open today',
                       ),
                       (
